@@ -13,7 +13,6 @@ pour les lancer :
 ```bash
 > ./server 
 > ./client 127.0.0.1 11710 
-code
 ```
 
 
