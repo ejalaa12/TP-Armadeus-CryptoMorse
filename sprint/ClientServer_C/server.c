@@ -33,9 +33,9 @@ int main(int argc,  char *argv[] )
 	memset( &cliaddr, 0, sizeof(cliaddr) );
 	serveraddress.sin_family = AF_INET;
 
-	int port=16;
+	int port=69;
 	if(argv[1]) 
-		port=*argv[1];
+		port=atoi(argv[1]);
 	serveraddress.sin_port = htons(port);//PORT NO
 	serveraddress.sin_addr.s_addr = htonl(INADDR_ANY);//IP ADDRESS
 	ret=bind(sd,(struct sockaddr*)&serveraddress,sizeof(serveraddress));

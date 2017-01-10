@@ -11,8 +11,11 @@
 pour les lancer : 
 
 ```bash
-> ./server 
-> ./client 127.0.0.1 11710 
+
+#le port TFTP utilisé par defaut est  69
+
+> ./server [port]
+> ./client 127.0.0.1 [port] 
 ```
 
 

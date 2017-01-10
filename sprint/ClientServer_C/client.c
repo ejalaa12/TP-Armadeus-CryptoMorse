@@ -15,7 +15,7 @@ int my_work(FILE *, int, struct sockaddr * ,socklen_t);
 
 int main( int C, char *argv[] )
 {
-	int	sd, ret,port=16;
+	int	sd, ret,port=69;
 	struct	sockaddr_in serveraddress;
 	if (NULL == argv[1])
 	{
