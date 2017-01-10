@@ -1,4 +1,3 @@
-
 #include	<stdio.h>
 #include	<stdlib.h>
 #include	<errno.h>
@@ -16,17 +15,17 @@ int my_work(FILE *, int, struct sockaddr * ,socklen_t);
 
 int main( int C, char *argv[] )
 {
-	int	sd, ret;
+	int	sd, ret,port=16;
 	struct	sockaddr_in serveraddress;
 	if (NULL == argv[1])
 	{
-		printf("Please enter the IP Address of the server\n");
-		exit(1);
+		//printf("Please enter the IP Address of the server\n");
+		//exit(1);
+
 	}
-	if (NULL== argv[2])
+	if (argv[2])
 	{
-		printf("Please enter the Port Number of the server\n");
-		exit(1);
+		port=atoi(argv[2]);
 	}
 	sd = socket( AF_INET, SOCK_DGRAM, 0 );
 	if(0 > sd ) 
@@ -37,7 +36,8 @@ int main( int C, char *argv[] )
 	
 	memset( &serveraddress, 0, sizeof(serveraddress) );
 	serveraddress.sin_family = AF_INET;
-	serveraddress.sin_port = htons(atoi(argv[2]));//PORT NO
+	
+	serveraddress.sin_port = htons(port);//PORT NO
 	serveraddress.sin_addr.s_addr = inet_addr(argv[1]);//ADDRESS
 	
 	printf("Client Starting service\n");
@@ -68,39 +68,27 @@ int my_work(FILE *fp,		/*Here to be used as stdin as argument*/
 	struct sockaddr_in serveraddr;
 	
 	
-		
-		printf("Enter Data For the server or press CTRL-D to exit\n");
-		/*Reading data from the keyboard*/
-		cptr = fgets(sendbuf,BUFSIZE,fp);
-		if (NULL == cptr)
-		{
-			printf("Possible error or end of file\n");
-			return 0;
-		}
-		slen = strlen (sendbuf);
-		/*Sending the read data over socket*/
-		ret = sendto(sockfd,sendbuf,slen,0,to,length);
-		if (0 > ret)
-		{
-			perror("Error in sending data:\n");
-			return -1;
-		}
-		printf("Data Sent To Server---------------------\n");
+		while(1){
+				printf("Enter Data For the server or press CTRL-D to exit\n");
+				/*Reading data from the keyboard*/
+				cptr = fgets(sendbuf,BUFSIZE,fp);
+				if (NULL == cptr)
+				{
+					printf("Possible error or end of file\n");
+					return 0;
+				}
+				slen = strlen (sendbuf);
+				/*Sending the read data over socket*/
+				ret = sendto(sockfd,sendbuf,slen,0,to,length);
+				if (0 > ret)
+				{
+					perror("Error in sending data:\n");
+					return -1;
+				}
+				printf("Data Sent To Server---------------------\n");
+			}
 
-		/*
-		structlen = sizeof(serveraddr);
-		numbytes = recvfrom(sockfd,recvbuf,BUFSIZE,0, (struct sockaddr*)&serveraddr,&structlen);
-		if (0 > numbytes)
-		{
-			perror("Error in receiving data:\n");
-			return -1;
-		}
-		printf("Data Received from server %s:\n", inet_ntop(AF_INET,&serveraddr.sin_addr,
-				servername,sizeof(servername)));
-		//writing to stdout
-		write(1,recvbuf,numbytes); 
-		*/
+	
 	
 
 }
-

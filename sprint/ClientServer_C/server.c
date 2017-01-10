@@ -1,4 +1,3 @@
-
 #include	<stdio.h>
 #include	<stdlib.h>
 #include	<errno.h>
@@ -12,7 +11,6 @@
 #include	<signal.h>
 
 #define BUFSIZE 512
-#define MYPORT 11710
 #define MAXNAME 100 
 int main(int argc,  char *argv[] )
 
@@ -34,7 +32,11 @@ int main(int argc,  char *argv[] )
 	memset( &serveraddress, 0, sizeof(serveraddress) );
 	memset( &cliaddr, 0, sizeof(cliaddr) );
 	serveraddress.sin_family = AF_INET;
-	serveraddress.sin_port = htons(MYPORT);//PORT NO
+
+	int port=16;
+	if(argv[1]) 
+		port=*argv[1];
+	serveraddress.sin_port = htons(port);//PORT NO
 	serveraddress.sin_addr.s_addr = htonl(INADDR_ANY);//IP ADDRESS
 	ret=bind(sd,(struct sockaddr*)&serveraddress,sizeof(serveraddress));
 	if(0 > ret)
@@ -45,28 +47,24 @@ int main(int argc,  char *argv[] )
 	
 		printf("UDP Server:  Waiting for client data\n");
 		length=sizeof(cliaddr);
-		/*Received a datagram*/
-		numbytes = recvfrom(sd,datareceived,BUFSIZE,0,
-				(struct sockaddr*)&cliaddr, &length);
-		if (0 > numbytes)
-		{
-			perror("Error while receiving:");
-			exit(1);
-		}
-		/*Printing client's address*/
-		printf("Data Received from %s\n",
-				inet_ntop(AF_INET,&cliaddr.sin_addr,
-					clientname,sizeof(clientname)));
+
+		while(1){
+			/*Received a datagram*/
+			numbytes = recvfrom(sd,datareceived,BUFSIZE,0,
+					(struct sockaddr*)&cliaddr, &length);
+			if (0 > numbytes)
+			{
+				perror("Error while receiving:");
+				exit(1);
+			}
+			/*Printing client's address*/
+			printf("Data Received from %s\n",
+					inet_ntop(AF_INET,&cliaddr.sin_addr,
+						clientname,sizeof(clientname)));
 		
-		/*Sending the Received datagram back*/
-		datareceived[numbytes]='\0';
-		printf("Server Receives: %s\n",datareceived);
-		/*bytessent = sendto(sd,datareceived,numbytes,0,(struct sockaddr *)&cliaddr,length);
-		if (0 > bytessent)
-		{
-			perror("Error while sending:");
-			exit(1);
-		}*/
-	}
-
-
+			/*Sending the Received datagram back*/
+			datareceived[numbytes]='\0';
+			printf("Server Receives: %s\n",datareceived);
+		
+		}
+}
