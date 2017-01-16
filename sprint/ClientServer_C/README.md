@@ -1,8 +1,10 @@
 # Compilation 
 
 ```bash
-> gcc client.c -o client.o
-> gcc server.c -o server.o
+> autoscan
+> autoconf
+> ./configure
+> make
 ```
   	
 
