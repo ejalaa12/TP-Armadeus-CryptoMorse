@@ -1,4 +1,3 @@
-
 #include	<stdio.h>
 #include	<stdlib.h>
 #include	<errno.h>
@@ -10,16 +9,20 @@
 #include	<sys/wait.h>
 #include	<fcntl.h>
 #include	<signal.h>
+#include "encrypt_func.h"
+#include "morse_func.h"
 
 #define BUFSIZE 512
 #define MYPORT 69
 #define MAXNAME 100 
+
+
 int main(int argc,  char *argv[] )
 
 {
 	int	sd, numbytes,bytessent, ret;
 	struct	sockaddr_in
-		serveraddress,cliaddr;
+	serveraddress,cliaddr;
 	socklen_t length;
 	char clientname[MAXNAME],datareceived[BUFSIZE];
 
@@ -43,13 +46,16 @@ int main(int argc,  char *argv[] )
 		exit(1);
 	}
 	
-		printf("UDP Server:  Waiting for client data\n");
-		length=sizeof(cliaddr);
+	printf("UDP Server:  Waiting for client data\n");
+	length=sizeof(cliaddr);
 
-		while(1){
+
+	while(1){
+		// Chaine de caractere en morse
+		char * msg_morse = (char *) malloc(sizeof(char)*BUFSIZE);
 		/*Received a datagram*/
 		numbytes = recvfrom(sd,datareceived,BUFSIZE,0,
-				(struct sockaddr*)&cliaddr, &length);
+			(struct sockaddr*)&cliaddr, &length);
 		if (0 > numbytes)
 		{
 			perror("Error while receiving:");
@@ -57,14 +63,24 @@ int main(int argc,  char *argv[] )
 		}
 		/*Printing client's address*/
 		printf("Data Received from %s\n",
-				inet_ntop(AF_INET,&cliaddr.sin_addr,
-					clientname,sizeof(clientname)));
+			inet_ntop(AF_INET,&cliaddr.sin_addr,
+				clientname,sizeof(clientname)));
 		
 		/*Sending the Received datagram back*/
 		datareceived[numbytes]='\0';
 		printf("Server Receives: %s\n",datareceived);
-		}
 		
+		encrypt(datareceived, 3);
+		printf("Message encrypted: %s\n", datareceived);
+
+		ascii2morse(datareceived, msg_morse);
+		printf("MORSE message: %s\n", msg_morse);
+
+		free(msg_morse);
+
 	}
+
+	
+}
 
 

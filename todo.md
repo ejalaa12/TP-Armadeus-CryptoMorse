@@ -6,3 +6,5 @@
 - [ ] bouclage pour qu'on puisse envoyer plusieurs messages
 
 ## 
+
+ajout d'un script init.d dans `/etc/init.d/`

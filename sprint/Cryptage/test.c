@@ -24,7 +24,7 @@ void encrypt(char * message, int degree) {
 
 int main()
 {
-	char * message = (char *) malloc(sizeof(char)*1);
+	char * message = (char *) malloc(sizeof(char)*100);
 	int  degree;
 	printf("Enter message:");
 	scanf("%s", message);
