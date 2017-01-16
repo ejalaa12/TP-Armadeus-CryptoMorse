@@ -1,8 +1,8 @@
 # Compilation 
 
 ```bash
-> gcc client.c -o client.o
-> gcc server.c -o server.o
+> ./configure
+> make
 ```
   	
 
