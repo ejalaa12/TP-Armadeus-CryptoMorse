@@ -1,6 +1,8 @@
 # Compilation 
 
 ```bash
+> autoscan
+> autoconf
 > ./configure
 > make
 ```
